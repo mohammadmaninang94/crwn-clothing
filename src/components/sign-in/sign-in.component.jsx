@@ -50,7 +50,7 @@ class SignIn extends React.Component {
                         value={this.state.email}
                         required
                     />
-                    <div class='buttons'>
+                    <div className='buttons'>
                         <CustomButton type='submit'> Sign In </CustomButton>
                         <CustomButton type='button' onClick={signInWithGoogle} isGoogleSignIn> Sign In with Google </CustomButton>
                     </div>
