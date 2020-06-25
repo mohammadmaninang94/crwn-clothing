@@ -5,7 +5,7 @@ import { signInSuccess, signInFailure, signOutSuccess, signOutFailure } from './
 
 import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
 
-function* getSnapshotFromUserAuth(userAuth) {
+export function* getSnapshotFromUserAuth(userAuth) {
     try {
         const userRef = yield call(createUserProfileDocument, userAuth);
         const userSnapshot = yield userRef.get();
@@ -15,7 +15,7 @@ function* getSnapshotFromUserAuth(userAuth) {
     }
 }
 
-function* signInWithGoogle() {
+export function* signInWithGoogle() {
     try {
         const { user } = yield auth.signInWithPopup(googleProvider);
         yield getSnapshotFromUserAuth(user);
@@ -24,7 +24,7 @@ function* signInWithGoogle() {
     }
 }
 
-function* signInWithEmail({ payload: { email, password } }) {
+export function* signInWithEmail({ payload: { email, password } }) {
     try {
         const { user } = yield auth.signInWithEmailAndPassword(email, password);
         yield getSnapshotFromUserAuth(user);
@@ -33,7 +33,7 @@ function* signInWithEmail({ payload: { email, password } }) {
     }
 }
 
-function* isUserAuthenticated() {
+export function* isUserAuthenticated() {
     try {
         const userAuth = yield getCurrentUser();
         if (userAuth) {
@@ -46,7 +46,7 @@ function* isUserAuthenticated() {
     }
 }
 
-function* signOut() {
+export function* signOut() {
     try {
         yield auth.signOut();
         yield put(signOutSuccess());
@@ -55,19 +55,19 @@ function* signOut() {
     }
 }
 
-function* onGoogleSignInStart() {
+export function* onGoogleSignInStart() {
     yield takeLatest(UserActionTypes.GOOGLE_SIGN_IN_START, signInWithGoogle)
 }
 
-function* onEmailSignInStart() {
+export function* onEmailSignInStart() {
     yield takeLatest(UserActionTypes.EMAIL_SIGN_IN_START, signInWithEmail)
 }
 
-function* onCheckUserSession() {
+export function* onCheckUserSession() {
     yield takeLatest(UserActionTypes.CHECK_CURRENT_USER, isUserAuthenticated)
 }
 
-function* onEmailSignOutStart() {
+export function* onEmailSignOutStart() {
     yield takeLatest(UserActionTypes.SIGN_OUT_START, signOut)
 }
 
